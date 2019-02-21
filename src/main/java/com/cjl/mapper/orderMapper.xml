@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.mapper.OrderMapper">
+	<select id="findOrdersUserLazyLoading" resultMap="OrdersUserLazyLoadingResultMap">
+		SELECT * FROM orders
+	</select>
+
+	<select id="findById" parameterType="int" resultType="com.cjl.model.User">
+		<![CDATA[SELECT * FROM  user  WHERE id=#{value}]]>
+	</select>
+	<!-- 延迟加载的resultMap -->
+	<resultMap type="com.cjl.model.Orders" id="OrdersUserLazyLoadingResultMap">
+		<!--对订单信息进行映射配置  -->
+		<id column="id" property="id"/>
+		<result column="userid" property="userid"/>
+		<association property="user"  javaType="com.cjl.model.User"
+					 select="com.cjl.mapper.UserMapper.findById"
+					 column="userid" >
+		</association>
+	</resultMap>
+</mapper>
